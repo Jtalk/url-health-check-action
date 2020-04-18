@@ -19,7 +19,11 @@ function curl(url, { maxAttempts, retryDelaySeconds, followRedirect }) {
     let redirectSettings = followRedirect ? '-L' : '';
 
     core.info(`Checking ${url}`);
-    let out = proc.execSync(`curl --fail -sv ${redirectSettings} ${url} ${retrySettings}`, processConfig);
+    let command = `curl --fail -sv ${redirectSettings} ${url} ${retrySettings}`;
+    core.debug("Command: " + command);
+
+    let out = proc.execSync(command, processConfig);
+
     core.info(out);
 }
 
