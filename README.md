@@ -1,6 +1,6 @@
 # URL health check action
 
-A cURL-based health check with build-in retry. 
+A cURL-based post-deploy health check with build-in redirect & retry. An quick & easy way to verify a deployment.   
 
 ```yaml
 steps:
