@@ -1,7 +1,6 @@
 name: 'URL Health Check'
 description: 'Ping given URL with optional retrying capabilities'
 author: "Roman Nazarenko <me@jtalk.me>, Liza Lukicheva <me@bananamilkshake.me>"
-icon: check
 inputs:
   url:
     description: Target URL(s), split by |
@@ -18,6 +17,9 @@ inputs:
     description: Follow redirected location in case request resulted in 3XX status code
     required: false
     default: 'false'
+branding:
+  icon: check
+  color: purple
 runs:
   using: 'node12'
   main: 'dist/index.js'
