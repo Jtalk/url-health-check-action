@@ -1,0 +1,17 @@
+name: 'URL Health Check'
+description: 'Ping given URL with optional retrying capabilities'
+inputs:
+  url:
+    description: Target URL
+    required: true
+  max-attempts:
+    description: Number of unsuccessful attempts to call URL before giving up
+    required: false
+    default: '1'
+  retry-delay:
+    description: Time between attempts (e.g. 3s, 1m)
+    required: false
+    default: '3s'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
