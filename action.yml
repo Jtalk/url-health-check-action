@@ -1,5 +1,6 @@
 name: 'URL Health Check'
 description: 'Ping given URL with optional retrying capabilities'
+author: "Roman Nazarenko <me@jtalk.me>, Liza Lukicheva <me@bananamilkshake.me>"
 inputs:
   url:
     description: Target URL(s), split by |
