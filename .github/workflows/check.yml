@@ -1,0 +1,35 @@
+name: Verify action
+
+on: [push]
+
+env:
+  NODE_VERSION: 12.x
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+#     - name: Use Node.js ${{ env.NODE_VERSION }}
+#       uses: actions/setup-node@v1
+#       with:
+#         node-version: ${{ env.NODE_VERSION }}
+    - name: Check single, no redirect
+      uses: ./
+      with:
+        url: https://postman-echo.com/status/200
+    - name: Check multiple, no redirect
+      uses: ./
+      with:
+        url: https://postman-echo.com/status/200|https://postman-echo.com/status/304
+    - name: Check single, with redirect
+      uses: ./
+      with:
+        url: https://postman-echo.com/status/200
+        follow-redirect: yes
+    - name: Check single, with retry
+      uses: ./
+      with:
+        url: https://postman-echo.com/status/200
+        max-attempts: 5
+        retry-delay: 2s
