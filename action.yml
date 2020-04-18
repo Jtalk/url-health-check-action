@@ -12,6 +12,10 @@ inputs:
     description: Time between attempts (e.g. 3s, 1m)
     required: false
     default: '3s'
+  follow-redirect:
+    description: Follow redirected location in case request resulted in 3XX status code
+    required: false
+    default: 'false'
 runs:
   using: 'node12'
   main: 'dist/index.js'
