@@ -2,7 +2,7 @@ name: 'URL Health Check'
 description: 'Ping given URL with optional retrying capabilities'
 inputs:
   url:
-    description: Target URL
+    description: Target URL(s), split by |
     required: true
   max-attempts:
     description: Number of unsuccessful attempts to call URL before giving up

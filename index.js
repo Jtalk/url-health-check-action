@@ -28,18 +28,21 @@ function curl(url, { maxAttempts, retryDelaySeconds, followRedirect }) {
 }
 
 try {
-    let url = core.getInput("url", {required: true});
+    let urlString = core.getInput("url", {required: true});
     let maxAttemptsString = core.getInput("max-attempts");
     let retryDelay = core.getInput("retry-delay");
     let followRedirectString = core.getInput("follow-redirect");
 
+    let urls = urlString.split("|");
     let retryDelaySeconds = duration.parse(retryDelay).seconds();
     let maxAttempts = parseInt(maxAttemptsString);
     let followRedirect = asBoolean(followRedirectString);
 
-    curl(url, {maxAttempts, retryDelaySeconds, followRedirect});
+    urls.forEach(url => {
+        curl(url, {maxAttempts, retryDelaySeconds, followRedirect})
+    });
 
-    core.info("Success")
+    core.info("Success");
 } catch (e) {
     console.error("Error running action", e);
     core.setFailed(e.message);
