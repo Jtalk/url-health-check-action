@@ -14,7 +14,7 @@ const processConfig = {
 function curl(url, { maxAttempts, retryDelaySeconds, followRedirect }) {
     let retrySettings = "";
     if (maxAttempts > 1) {
-        retrySettings = `--retry ${maxAttempts} --retry-delay ${retryDelaySeconds}`;
+        retrySettings = `--retry ${maxAttempts} --retry-delay ${retryDelaySeconds} --retry-connrefused`;
     }
     let redirectSettings = followRedirect ? '-L' : '';
 
