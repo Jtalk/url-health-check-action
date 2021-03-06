@@ -10,10 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-#     - name: Use Node.js ${{ env.NODE_VERSION }}
-#       uses: actions/setup-node@v1
-#       with:
-#         node-version: ${{ env.NODE_VERSION }}
     - name: Check single, no redirect
       uses: ./
       with:
@@ -33,10 +29,11 @@ jobs:
         url: https://postman-echo.com/status/200
         max-attempts: 5
         retry-delay: 2s
-    - name: Check single, with retry-all
-      uses: ./
-      with:
-        url: https://postman-echo.com/status/200
-        max-attempts: 5
-        retry-delay: 2s
-        retry-all: yes
+# Ubuntu latest does not support this option yet
+#    - name: Check single, with retry-all
+#      uses: ./
+#      with:
+#        url: https://postman-echo.com/status/200
+#        max-attempts: 5
+#        retry-delay: 2s
+#        retry-all: yes
