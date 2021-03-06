@@ -33,3 +33,10 @@ jobs:
         url: https://postman-echo.com/status/200
         max-attempts: 5
         retry-delay: 2s
+    - name: Check single, with retry-all
+      uses: ./
+      with:
+        url: https://postman-echo.com/status/200
+        max-attempts: 5
+        retry-delay: 2s
+        retry-all: yes
