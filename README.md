@@ -15,6 +15,8 @@ steps:
       max-attempts: 3 # Optional, defaults to 1
       # Delay between retries
       retry-delay: 5s # Optional, only applicable to max-attempts > 1
+      # Retry all errors, including 404
+      retry-all: no # Optional, defaults to "no"
 ```
 
 The action will fail if any of the URLs reports either 4xx or 5xx status codes.

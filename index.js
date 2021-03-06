@@ -11,15 +11,16 @@ const processConfig = {
     encoding: "utf8",
 };
 
-function curl(url, { maxAttempts, retryDelaySeconds, followRedirect }) {
+function curl(url, { maxAttempts, retryDelaySeconds, retryAll, followRedirect }) {
     let retrySettings = "";
     if (maxAttempts > 1) {
         retrySettings = `--retry ${maxAttempts} --retry-delay ${retryDelaySeconds} --retry-connrefused`;
     }
     let redirectSettings = followRedirect ? '-L' : '';
+    let retryAllSettings = retryAll ? '--retry-all-errors' : '';
 
     core.info(`Checking ${url}`);
-    let command = `curl --fail -sv ${redirectSettings} ${url} ${retrySettings}`;
+    let command = `curl --fail -sv ${redirectSettings} ${url} ${retrySettings} ${retryAllSettings}`;
     core.debug("Command: " + command);
 
     let out = proc.execSync(command, processConfig);
@@ -32,14 +33,16 @@ try {
     let maxAttemptsString = core.getInput("max-attempts");
     let retryDelay = core.getInput("retry-delay");
     let followRedirectString = core.getInput("follow-redirect");
+    let retryAllString = core.getInput("retry-all");
 
     let urls = urlString.split("|");
     let retryDelaySeconds = duration.parse(retryDelay).seconds();
     let maxAttempts = parseInt(maxAttemptsString);
     let followRedirect = asBoolean(followRedirectString);
+    let retryAll = asBoolean(retryAllString);
 
     urls.forEach(url => {
-        curl(url, {maxAttempts, retryDelaySeconds, followRedirect})
+        curl(url, {maxAttempts, retryDelaySeconds, retryAll, followRedirect})
     });
 
     core.info("Success");
