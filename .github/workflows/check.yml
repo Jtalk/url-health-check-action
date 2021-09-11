@@ -17,10 +17,10 @@ jobs:
           - macos-latest
           - windows-latest
     runs-on: ${{ matrix.os }}
+    name: Check single, no redirect
     steps:
       - uses: actions/checkout@v2
-      - name: Check single, no redirect
-        uses: ./
+      - uses: ./
         with:
           url: https://postman-echo.com/status/200
 
@@ -32,10 +32,10 @@ jobs:
           - macos-latest
           - windows-latest
     runs-on: ${{ matrix.os }}
+    name: Check multiple, no redirect
     steps:
       - uses: actions/checkout@v2
-      - name: Check multiple, no redirect
-        uses: ./
+      - uses: ./
         with:
           url: https://postman-echo.com/status/200|https://postman-echo.com/status/304
 
@@ -47,13 +47,13 @@ jobs:
           - macos-latest
           - windows-latest
     runs-on: ${{ matrix.os }}
+    name: Check single, with redirect
     steps:
       - uses: actions/checkout@v2
-      - name: Check single, with redirect
-        uses: ./
+      - uses: ./
         with:
           url: https://postman-echo.com/status/200
-          follow-redirect: yes
+          follow-redirect: true
 
   check-single-with-retry:
     strategy:
@@ -63,28 +63,29 @@ jobs:
           - macos-latest
           - windows-latest
     runs-on: ${{ matrix.os }}
+    name: Check single, with retry
     steps:
       - uses: actions/checkout@v2
-      - name: Check single, with retry
-        uses: ./
+      - uses: ./
         with:
           url: https://postman-echo.com/status/200
           max-attempts: 5
           retry-delay: 2s
-#  check-single-retry-all:
-#    strategy:
-#      matrix:
-#        os:
-#          - ubuntu-latest
-#          - macos-latest
-#          - windows-latest
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Check single, with retry-all
-#        uses: ./
-#        with:
-#          url: https://postman-echo.com/status/200
-#          max-attempts: 5
-#          retry-delay: 2s
-#          retry-all: yes
+
+  check-single-retry-all:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+    name: Check single, with retry-all
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          url: https://postman-echo.com/status/200
+          max-attempts: 5
+          retry-delay: 2s
+          retry-all: true
