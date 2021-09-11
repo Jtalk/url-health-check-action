@@ -15,7 +15,7 @@ steps:
       max-attempts: 3 # Optional, defaults to 1
       # Delay between retries
       retry-delay: 5s # Optional, only applicable to max-attempts > 1
-      # Retry all errors, including 404
+      # Retry all errors, including 404. This option might trigger curl upgrade.
       retry-all: no # Optional, defaults to "no"
 ```
 
