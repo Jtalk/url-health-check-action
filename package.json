@@ -4,7 +4,8 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "ncc build",
+    "dev": "ncc build --watch index.js",
+    "build": "ncc build index.js",
     "lint": "prettier --check ."
   },
   "author": "",
@@ -14,7 +15,8 @@
     "@actions/exec": "^1.1.0",
     "@actions/github": "^5.0.0",
     "@vercel/ncc": "^0.31.0",
-    "duration-js": "^4.0.0"
+    "duration-js": "^4.0.0",
+    "semver": "^7.3.5"
   },
   "devDependencies": {
     "prettier": "^2.4.0"
