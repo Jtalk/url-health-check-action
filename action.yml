@@ -1,5 +1,5 @@
-name: 'URL Health Check'
-description: 'Ping given URL (with curl) for a post-deploy check. With redirect and retrying capabilities'
+name: "URL Health Check"
+description: "Ping given URL (with curl) for a post-deploy check. With redirect and retrying capabilities"
 author: "Roman Nazarenko <me@jtalk.me>, Liza Lukicheva <me@bananamilkshake.me>"
 inputs:
   url:
@@ -8,22 +8,22 @@ inputs:
   max-attempts:
     description: Number of unsuccessful attempts to call URL before giving up
     required: false
-    default: '1'
+    default: "1"
   retry-delay:
     description: Time between attempts (e.g. 3s, 1m)
     required: false
-    default: '3s'
+    default: "3s"
   follow-redirect:
     description: Follow redirected location in case request resulted in 3XX status code
     required: false
-    default: 'false'
+    default: "false"
   retry-all:
     description: Retry all errors, including 4xx (see man curl on --retry-all-errors)
     required: false
-    default: 'false'
+    default: "false"
 branding:
   icon: check
   color: purple
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: "node12"
+  main: "dist/index.js"
