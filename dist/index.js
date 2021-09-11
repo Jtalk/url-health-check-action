@@ -5298,6 +5298,7 @@ async function upgrade() {
       exec: async () => {
         const binDir = external_path_.join(external_os_.homedir(), ".bin");
         const curlPath = external_path_.join(binDir, "curl");
+        // From https://curl.se/download.html#Linux
         const curlUrl = `https://github.com/moparisthebest/static-curl/releases/download/v7.78.0/curl-amd64`;
         await (0,exec.exec)("mkdir", ["-p", binDir]);
         await (0,exec.exec)("wget", ["-O", curlPath, curlUrl]);
