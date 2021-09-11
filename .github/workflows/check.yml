@@ -1,39 +1,90 @@
 name: Verify action
 
-on: [push]
-
-env:
-  NODE_VERSION: 12.x
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
-  check:
-    runs-on: ubuntu-latest
+  check-single-no-redirect:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
-    - name: Check single, no redirect
-      uses: ./
-      with:
-        url: https://postman-echo.com/status/200
-    - name: Check multiple, no redirect
-      uses: ./
-      with:
-        url: https://postman-echo.com/status/200|https://postman-echo.com/status/304
-    - name: Check single, with redirect
-      uses: ./
-      with:
-        url: https://postman-echo.com/status/200
-        follow-redirect: yes
-    - name: Check single, with retry
-      uses: ./
-      with:
-        url: https://postman-echo.com/status/200
-        max-attempts: 5
-        retry-delay: 2s
-# Ubuntu latest does not support this option yet
-#    - name: Check single, with retry-all
-#      uses: ./
-#      with:
-#        url: https://postman-echo.com/status/200
-#        max-attempts: 5
-#        retry-delay: 2s
-#        retry-all: yes
+      - uses: actions/checkout@v2
+      - name: Check single, no redirect
+        uses: ./
+        with:
+          url: https://postman-echo.com/status/200
+
+  check-multiple-no-redirect:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check multiple, no redirect
+        uses: ./
+        with:
+          url: https://postman-echo.com/status/200|https://postman-echo.com/status/304
+
+  check-single-with-redirect:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check single, with redirect
+        uses: ./
+        with:
+          url: https://postman-echo.com/status/200
+          follow-redirect: yes
+
+  check-single-with-retry:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check single, with retry
+        uses: ./
+        with:
+          url: https://postman-echo.com/status/200
+          max-attempts: 5
+          retry-delay: 2s
+#  check-single-retry-all:
+#    strategy:
+#      matrix:
+#        os:
+#          - ubuntu-latest
+#          - macos-latest
+#          - windows-latest
+#    runs-on: ${{ matrix.os }}
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Check single, with retry-all
+#        uses: ./
+#        with:
+#          url: https://postman-echo.com/status/200
+#          max-attempts: 5
+#          retry-delay: 2s
+#          retry-all: yes
