@@ -41,16 +41,38 @@ export async function isVersion(atLeast) {
 }
 
 export async function upgrade() {
-  const binDir = path.join(os.homedir(), ".bin");
-  const curlPath = path.join(binDir, "curl");
+  const upgrader = {
+    linux: {
+      exec: async () => {
+        const binDir = path.join(os.homedir(), ".bin");
+        const curlPath = path.join(binDir, "curl");
+        const curlUrl = `https://github.com/moparisthebest/static-curl/releases/download/v7.78.0/curl-amd64`;
+        await exec("mkdir", ["-p", binDir]);
+        await exec("wget", ["-O", curlPath, curlUrl]);
+        await exec("chmod", ["+x", curlPath]);
+        core.addPath(binDir);
+      },
+    },
+    win32: {
+      exec: async () => {
+        await exec("choco", ["install", "curl"]);
+      },
+    },
+    darwin: {
+      exec: async () => {
+        await exec("brew", ["install", "curl"]);
+      },
+    },
+  };
 
-  // This is the link from https://curl.se/download.html
-  const curlUrl = `https://github.com/moparisthebest/static-curl/releases/download/v7.78.0/curl-amd64`;
-  await exec("mkdir", ["-p", binDir]);
-  await exec("wget", ["-O", curlPath, curlUrl]);
-  await exec("chmod", ["+x", curlPath]);
+  const platformUpgrader = upgrader[process.platform];
+  if (!platformUpgrader) {
+    throw new Error(
+      `Unsupported platform: ${
+        process.platform
+      }, supported platforms: ${Object.keys(upgrader).join(", ")}`
+    );
+  }
 
-  core.addPath(binDir);
-
-  return curlPath;
+  await platformUpgrader.exec();
 }

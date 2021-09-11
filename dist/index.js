@@ -5293,28 +5293,46 @@ async function isVersion(atLeast) {
 }
 
 async function upgrade() {
-  const binDir = external_path_.join(external_os_.homedir(), ".bin");
-  const curlPath = external_path_.join(binDir, "curl");
+  const upgrader = {
+    linux: {
+      exec: async () => {
+        const binDir = external_path_.join(external_os_.homedir(), ".bin");
+        const curlPath = external_path_.join(binDir, "curl");
+        const curlUrl = `https://github.com/moparisthebest/static-curl/releases/download/v7.78.0/curl-amd64`;
+        await (0,exec.exec)("mkdir", ["-p", binDir]);
+        await (0,exec.exec)("wget", ["-O", curlPath, curlUrl]);
+        await (0,exec.exec)("chmod", ["+x", curlPath]);
+        core.addPath(binDir);
+      },
+    },
+    win32: {
+      exec: async () => {
+        await (0,exec.exec)("choco", ["install", "curl"]);
+      },
+    },
+    darwin: {
+      exec: async () => {
+        await (0,exec.exec)("brew", ["install", "curl"]);
+      },
+    },
+  };
 
-  // This is the link from https://curl.se/download.html
-  const curlUrl = `https://github.com/moparisthebest/static-curl/releases/download/v7.78.0/curl-amd64`;
-  await (0,exec.exec)("mkdir", ["-p", binDir]);
-  await (0,exec.exec)("wget", ["-O", curlPath, curlUrl]);
-  await (0,exec.exec)("chmod", ["+x", curlPath]);
+  const platformUpgrader = upgrader[process.platform];
+  if (!platformUpgrader) {
+    throw new Error(
+      `Unsupported platform: ${
+        process.platform
+      }, supported platforms: ${Object.keys(upgrader).join(", ")}`
+    );
+  }
 
-  core.addPath(binDir);
-
-  return curlPath;
+  await platformUpgrader.exec();
 }
 
 ;// CONCATENATED MODULE: ./index.js
 
 
 
-
-function isLinux() {
-  return process.platform === "linux";
-}
 
 async function run() {
   const urlString = core.getInput("url", { required: true });
@@ -5330,24 +5348,12 @@ async function run() {
   if (retryAll) {
     const isUpToDate = await isVersion("7.71.0");
     if (!isUpToDate) {
-      // This is an outdated version of curl that doesn't support retry-all-errors
-      if (isLinux()) {
-        // We know how to upgrade it on Linux
-        core.warning(
-          "The installed version of curl does not support retry-all-errors. " +
-            "It will be upgraded automatically. If you don't want this to happen, either " +
-            "upgrade it manually, or turn off retry-all."
-        );
-        await upgrade();
-      } else {
-        // MacOS should already have the up to date version, not sure about windows...
-        core.error(
-          "Curl version is outdated and does not support --retry-all-errors. " +
-            "We only support curl upgrade on Ubuntu. " +
-            "You could try upgrading your runner/curl manually, or raise an issue in this plugin's repository."
-        );
-        throw Error("Curl version does not support --retry-all-errors");
-      }
+      core.warning(
+        "The installed version of curl does not support retry-all-errors. " +
+          "It will be upgraded automatically. If you don't want this to happen, you need to either " +
+          "upgrade it manually, or turn off retry-all."
+      );
+      await upgrade();
     }
   }
 

@@ -6,10 +6,6 @@ import {
   isVersion as isCurlVersion,
 } from "./curl";
 
-function isLinux() {
-  return process.platform === "linux";
-}
-
 async function run() {
   const urlString = core.getInput("url", { required: true });
   const maxAttemptsString = core.getInput("max-attempts");
@@ -24,24 +20,12 @@ async function run() {
   if (retryAll) {
     const isUpToDate = await isCurlVersion("7.71.0");
     if (!isUpToDate) {
-      // This is an outdated version of curl that doesn't support retry-all-errors
-      if (isLinux()) {
-        // We know how to upgrade it on Linux
-        core.warning(
-          "The installed version of curl does not support retry-all-errors. " +
-            "It will be upgraded automatically. If you don't want this to happen, either " +
-            "upgrade it manually, or turn off retry-all."
-        );
-        await upgradeCurl();
-      } else {
-        // MacOS should already have the up to date version, not sure about windows...
-        core.error(
-          "Curl version is outdated and does not support --retry-all-errors. " +
-            "We only support curl upgrade on Ubuntu. " +
-            "You could try upgrading your runner/curl manually, or raise an issue in this plugin's repository."
-        );
-        throw Error("Curl version does not support --retry-all-errors");
-      }
+      core.warning(
+        "The installed version of curl does not support retry-all-errors. " +
+          "It will be upgraded automatically. If you don't want this to happen, you need to either " +
+          "upgrade it manually, or turn off retry-all."
+      );
+      await upgradeCurl();
     }
   }
 
