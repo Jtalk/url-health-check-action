@@ -12,5 +12,8 @@
     "@actions/core": "^1.2.6",
     "@actions/github": "^2.1.1",
     "duration-js": "^4.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.4.0"
   }
 }
