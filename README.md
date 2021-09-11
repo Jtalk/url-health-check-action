@@ -5,7 +5,7 @@ A cURL-based post-deploy health check with build-in redirect & retry. An quick &
 ```yaml
 steps:
   - name: Check the deployed service URL
-    uses: jtalk/url-health-check-action@v1.5
+    uses: jtalk/url-health-check-action@v2
     with:
       # Check the following URLs one by one sequentially
       url: https://example.com|http://example.com
