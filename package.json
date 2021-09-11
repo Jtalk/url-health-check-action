@@ -1,7 +1,7 @@
 {
   "name": "url-health-check",
-  "version": "1.2.0",
-  "description": "",
+  "version": "2.0.0",
+  "description": "Health check URLs with curl",
   "main": "dist/index.js",
   "scripts": {
     "dev": "ncc build --watch index.js",
