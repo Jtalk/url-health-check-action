@@ -1,55 +1,59 @@
 const core = require("@actions/core");
-const proc = require("child_process");
+const exec = require("@actions/exec");
 const duration = require("duration-js");
 
-function asBoolean(str) {
-  return str && ["yes", "true", "y", "1"].includes(str);
-}
-
-const processConfig = {
-  stdio: "inherit",
-  encoding: "utf8",
-};
-
-function curl(
+async function curl(
   url,
   { maxAttempts, retryDelaySeconds, retryAll, followRedirect }
 ) {
-  let retrySettings = "";
+  const options = ["--fail", "-sv"];
   if (maxAttempts > 1) {
-    retrySettings = `--retry ${maxAttempts} --retry-delay ${retryDelaySeconds} --retry-connrefused`;
+    options.push(
+      "--retry",
+      maxAttempts,
+      "--retry-delay",
+      retryDelaySeconds,
+      "--retry-connrefused"
+    );
   }
-  let redirectSettings = followRedirect ? "-L" : "";
-  let retryAllSettings = retryAll ? "--retry-all-errors" : "";
+  if (followRedirect) {
+    options.push("-L");
+  }
+  if (retryAll) {
+    options.push("--retry-all-errors");
+  }
 
   core.info(`Checking ${url}`);
-  let command = `curl --fail -sv ${redirectSettings} ${url} ${retrySettings} ${retryAllSettings}`;
-  core.debug("Command: " + command);
+  core.debug(`Command: curl ${options.join(" ")}`);
 
-  let out = proc.execSync(command, processConfig);
-
-  core.info(out);
+  return exec.exec("curl", options);
 }
 
-try {
-  let urlString = core.getInput("url", { required: true });
-  let maxAttemptsString = core.getInput("max-attempts");
-  let retryDelay = core.getInput("retry-delay");
-  let followRedirectString = core.getInput("follow-redirect");
-  let retryAllString = core.getInput("retry-all");
+async function run() {
+  const urlString = core.getInput("url", { required: true });
+  const maxAttemptsString = core.getInput("max-attempts");
+  const retryDelay = core.getInput("retry-delay");
+  const followRedirect = core.getBooleanInput("follow-redirect");
+  const retryAll = core.getBooleanInput("retry-all");
 
-  let urls = urlString.split("|");
-  let retryDelaySeconds = duration.parse(retryDelay).seconds();
-  let maxAttempts = parseInt(maxAttemptsString);
-  let followRedirect = asBoolean(followRedirectString);
-  let retryAll = asBoolean(retryAllString);
+  const urls = urlString.split("|");
+  const retryDelaySeconds = duration.parse(retryDelay).seconds();
+  const maxAttempts = parseInt(maxAttemptsString);
 
-  urls.forEach((url) => {
-    curl(url, { maxAttempts, retryDelaySeconds, retryAll, followRedirect });
-  });
+  for (const url of urls) {
+    // We don't need to do it in parallel, we're going to have to
+    // wait for all of them anyway
+    await curl(url, {
+      maxAttempts,
+      retryDelaySeconds,
+      retryAll,
+      followRedirect,
+    });
+  }
 
   core.info("Success");
-} catch (e) {
-  console.error("Error running action", e);
-  core.setFailed(e.message);
 }
+
+run().catch((e) => {
+  core.setFailed(e.message);
+});
