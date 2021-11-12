@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ncc build --watch index.js",
     "build": "ncc build index.js",
-    "lint": "prettier --check ."
+    "lint": "prettier --check . && eslint"
   },
   "author": "",
   "license": "MIT",
@@ -19,6 +19,11 @@
     "semver": "^7.3.5"
   },
   "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.1",
     "prettier": "^2.4.0"
   }
 }
