@@ -57,6 +57,9 @@ export async function upgrade() {
     win32: {
       exec: async () => {
         await exec("choco", ["install", "curl"]);
+        // If this is the first time chocolatey is run, it won't be in the PATH.
+        // It sounds like a runner setup issue, to be fair, but we still need it to work.
+        core.addPath("C:\\ProgramData\\chocolatey\\bin");
       },
     },
     darwin: {
