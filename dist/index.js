@@ -5335,6 +5335,15 @@ async function upgrade() {
 
 
 
+process.on("unhandledRejection", (reason) => {
+  if (reason instanceof Error) {
+    core.error(reason.stack); // Because Github won't print it otherwise
+    core.setFailed(reason);
+  } else {
+    core.setFailed(`${reason}`);
+  }
+});
+
 async function run() {
   const urlString = core.getInput("url", { required: true });
   const maxAttemptsString = core.getInput("max-attempts");
@@ -5373,7 +5382,7 @@ async function run() {
 }
 
 run().catch((e) => {
-  core.setFailed(e.message);
+  core.setFailed(e);
 });
 
 })();
