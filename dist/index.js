@@ -5264,9 +5264,9 @@ async function curl(
   if (maxAttempts > 1) {
     options.push(
       "--retry",
-      maxAttempts,
+      `${maxAttempts}`,
       "--retry-delay",
-      retryDelaySeconds,
+      `${retryDelaySeconds}`,
       "--retry-connrefused"
     );
   }
