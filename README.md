@@ -10,13 +10,13 @@ steps:
       # Check the following URLs one by one sequentially
       url: https://example.com|http://example.com
       # Follow redirects, or just report success on 3xx status codes
-      follow-redirect: no # Optional, defaults to "no"
+      follow-redirect: false # Optional, defaults to "false"
       # Fail this action after this many failed attempts
       max-attempts: 3 # Optional, defaults to 1
       # Delay between retries
       retry-delay: 5s # Optional, only applicable to max-attempts > 1
       # Retry all errors, including 404. This option might trigger curl upgrade.
-      retry-all: no # Optional, defaults to "no"
+      retry-all: false # Optional, defaults to "false"
 ```
 
 The action will fail if any of the URLs reports either 4xx or 5xx status codes.
