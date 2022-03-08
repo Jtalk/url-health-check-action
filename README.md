@@ -17,6 +17,8 @@ steps:
       retry-delay: 5s # Optional, only applicable to max-attempts > 1
       # Retry all errors, including 404. This option might trigger curl upgrade.
       retry-all: false # Optional, defaults to "false"
+      # Tell curl to skip certificate validation when making the call
+      skip-validation: false # Optional, defaults to "false"
 ```
 
 The action will fail if any of the URLs reports either 4xx or 5xx status codes.
