@@ -6,7 +6,7 @@ import * as semver from "semver";
 
 export async function curl(
   url,
-  { maxAttempts, retryDelaySeconds, retryAll, followRedirect }
+  { maxAttempts, retryDelaySeconds, retryAll, followRedirect, skipValidation }
 ) {
   const options = ["--fail", "-sv"];
   if (maxAttempts > 1) {
@@ -23,6 +23,9 @@ export async function curl(
   }
   if (retryAll) {
     options.push("--retry-all-errors");
+  }
+  if (skipValidation) {
+    options.push("--insecure");
   }
 
   options.push(url);
