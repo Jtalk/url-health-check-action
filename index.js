@@ -21,6 +21,7 @@ async function run() {
   const retryDelay = core.getInput("retry-delay");
   const followRedirect = core.getBooleanInput("follow-redirect");
   const retryAll = core.getBooleanInput("retry-all");
+  const skipValidation = core.getBooleanInput("skip-validation");
 
   const urls = urlString.split("|");
   const retryDelaySeconds = duration.parse(retryDelay).seconds();
@@ -46,6 +47,7 @@ async function run() {
       retryDelaySeconds,
       retryAll,
       followRedirect,
+      skipValidation,
     });
   }
 
