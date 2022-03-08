@@ -17,6 +17,10 @@ inputs:
     description: Follow redirected location in case request resulted in 3XX status code
     required: false
     default: "false"
+  skip-validation:
+    description: Will skip certificate validation when making the request
+    required: false
+    default: "false"
   retry-all:
     description: |
       Retry all errors, including 4xx (see man curl on --retry-all-errors).
