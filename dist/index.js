@@ -7566,7 +7566,7 @@ var semver = __nccwpck_require__(1383);
 
 async function curl(
   url,
-  { maxAttempts, retryDelaySeconds, retryAll, followRedirect }
+  { maxAttempts, retryDelaySeconds, retryAll, followRedirect, cookie, basicAuth }
 ) {
   const options = ["--fail", "-sv"];
   if (maxAttempts > 1) {
@@ -7583,6 +7583,12 @@ async function curl(
   }
   if (retryAll) {
     options.push("--retry-all-errors");
+  }
+  if(cookie) {
+    options.push("--cookie", `${cookie}`);
+  }
+  if(basicAuth) {
+    options.push("-u", `${basicAuth}`);
   }
 
   options.push(url);
@@ -7661,6 +7667,8 @@ async function run() {
   const retryDelay = core.getInput("retry-delay");
   const followRedirect = core.getBooleanInput("follow-redirect");
   const retryAll = core.getBooleanInput("retry-all");
+  const cookie = core.getInput("cookie");
+  const basicAuth = core.getInput("basic-auth");
 
   const urls = urlString.split("|");
   const retryDelaySeconds = duration_default().parse(retryDelay).seconds();
@@ -7686,6 +7694,8 @@ async function run() {
       retryDelaySeconds,
       retryAll,
       followRedirect,
+      cookie,
+      basicAuth
     });
   }
 

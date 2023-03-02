@@ -17,6 +17,12 @@ steps:
       retry-delay: 5s # Optional, only applicable to max-attempts > 1
       # Retry all errors, including 404. This option might trigger curl upgrade.
       retry-all: false # Optional, defaults to "false"
+      # String representation of cookie attached to health check request.
+      # Format: `Name=Value`
+      cookie: "token=asdf1234" # Optional, default is empty
+      # Basic auth login password pair.
+      # Format: `login:password`
+      basic-auth: "login:password" # Optional, default is empty
 ```
 
 The action will fail if any of the URLs reports either 4xx or 5xx status codes.

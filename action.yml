@@ -23,6 +23,18 @@ inputs:
       This might upgrade curl to the version supporting this flag.
     required: false
     default: "false"
+  cookie:
+    description: |
+      String representation of cookie attached to health check request.
+      Format: `Name=Value`
+    required: false
+    default: ""
+  basic-auth:
+    description: |
+      Basic auth login password pair.
+      Format: `login:password`
+    required: false
+    default: ""
 branding:
   icon: check
   color: purple

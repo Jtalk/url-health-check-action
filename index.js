@@ -21,6 +21,8 @@ async function run() {
   const retryDelay = core.getInput("retry-delay");
   const followRedirect = core.getBooleanInput("follow-redirect");
   const retryAll = core.getBooleanInput("retry-all");
+  const cookie = core.getInput("cookie");
+  const basicAuth = core.getInput("basic-auth");
 
   const urls = urlString.split("|");
   const retryDelaySeconds = duration.parse(retryDelay).seconds();
@@ -46,6 +48,8 @@ async function run() {
       retryDelaySeconds,
       retryAll,
       followRedirect,
+      cookie,
+      basicAuth
     });
   }
 
