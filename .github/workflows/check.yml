@@ -90,6 +90,22 @@ jobs:
           retry-delay: 2s
           retry-all: true
 
+  check-single-with-basic-auth:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+    name: Check single, with basic auth
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          url: https://postman-echo.com/basic-auth
+          basic-auth: "postman:password"
+
   check-allow-insecure:
     strategy:
       matrix:
