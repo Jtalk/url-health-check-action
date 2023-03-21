@@ -35,6 +35,11 @@ inputs:
       Format: `login:password`
     required: false
     default: ""
+  allow-insecure:
+    description: |
+       Skip the TLS verification step and proceed without checking (see man curl on --insecure).
+    required: false
+    default: "false"
 branding:
   icon: check
   color: purple

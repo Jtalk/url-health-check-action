@@ -23,6 +23,7 @@ async function run() {
   const retryAll = core.getBooleanInput("retry-all");
   const cookie = core.getInput("cookie");
   const basicAuth = core.getInput("basic-auth");
+  const allowInsecure = core.getBooleanInput("allow-insecure");
 
   const urls = urlString.split("|");
   const retryDelaySeconds = duration.parse(retryDelay).seconds();
@@ -49,7 +50,8 @@ async function run() {
       retryAll,
       followRedirect,
       cookie,
-      basicAuth
+      basicAuth,
+      allowInsecure
     });
   }
 

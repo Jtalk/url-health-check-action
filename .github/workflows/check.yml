@@ -90,7 +90,7 @@ jobs:
           retry-delay: 2s
           retry-all: true
 
-  check-single-with-basic-auth:
+  check-allow-insecure:
     strategy:
       matrix:
         os:
@@ -98,10 +98,10 @@ jobs:
           - macos-latest
           - windows-latest
     runs-on: ${{ matrix.os }}
-    name: Check single, with basic auth
+    name: Check allow-insecure
     steps:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          url: https://postman-echo.com/basic-auth
-          basic-auth: "postman:password"
+          url: https://expired.badssl.com/
+          allow-insecure: true
