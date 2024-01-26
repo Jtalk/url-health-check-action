@@ -19,7 +19,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Check single, no redirect
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           url: https://postman-echo.com/status/200
@@ -34,7 +34,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Check multiple, no redirect
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           url: https://postman-echo.com/status/200|https://postman-echo.com/status/304
@@ -49,7 +49,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Check single, with redirect
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           url: https://postman-echo.com/status/200
@@ -65,7 +65,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Check single, with retry
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           url: https://postman-echo.com/status/200
@@ -82,7 +82,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Check single, with retry-all
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           url: https://postman-echo.com/status/200
@@ -100,7 +100,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Check single, with basic auth
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           url: https://postman-echo.com/basic-auth
