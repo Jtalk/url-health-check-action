@@ -6,9 +6,16 @@ import * as semver from "semver";
 
 export async function curl(
   url,
-  { maxAttempts, retryDelaySeconds, retryAll, followRedirect, cookie, basicAuth }
+  {
+    maxAttempts,
+    retryDelaySeconds,
+    retryAll,
+    followRedirect,
+    cookie,
+    basicAuth,
+  }
 ) {
-  const options = ["--fail", "-sv"];
+  const options = ["-sv", "-I"];
   if (maxAttempts > 1) {
     options.push(
       "--retry",
@@ -24,10 +31,10 @@ export async function curl(
   if (retryAll) {
     options.push("--retry-all-errors");
   }
-  if(cookie) {
+  if (cookie) {
     options.push("--cookie", `${cookie}`);
   }
-  if(basicAuth) {
+  if (basicAuth) {
     options.push("-u", `${basicAuth}`);
   }
 
@@ -36,7 +43,16 @@ export async function curl(
   core.info(`Checking ${url}`);
   core.debug(`Command: curl ${options.join(" ")}`);
 
-  return exec("curl", options);
+  let output = "";
+  const result = exec("curl", options, {
+    listeners: {
+      stdout: (data) => {
+        output += data.toString();
+      },
+    },
+  });
+
+  return { output, result };
 }
 
 export async function isVersion(atLeast) {

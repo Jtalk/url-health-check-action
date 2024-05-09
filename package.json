@@ -1,14 +1,14 @@
 {
-  "name": "url-health-check",
-  "version": "2.0.0",
-  "description": "Health check URLs with curl",
+  "name": "cors-check",
+  "version": "1.0.0",
+  "description": "CORS check URLs with curl",
   "main": "dist/index.js",
   "scripts": {
     "dev": "ncc build --watch index.js",
     "build": "ncc build index.js",
-    "lint": "prettier --check . && eslint"
+    "lint": "prettier --write . && eslint"
   },
-  "author": "",
+  "author": "Qiming-Liu",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.10.0",

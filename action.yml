@@ -1,6 +1,6 @@
-name: "URL Health Check"
-description: "Ping given URL (with curl) for a post-deploy check. With redirect and retrying capabilities"
-author: "Roman Nazarenko <me@jtalk.me>, Liza Lukicheva <me@bananamilkshake.me>"
+name: "CORS Check"
+description: "Ping given URL (with curl) for a CORS check. With redirect and retrying capabilities"
+author: "Qiming-Liu"
 inputs:
   url:
     description: Target URL(s), split by |

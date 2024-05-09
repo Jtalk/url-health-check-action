@@ -43,14 +43,20 @@ async function run() {
   for (const url of urls) {
     // We don't need to do it in parallel, we're going to have to
     // wait for all of them anyway
-    await curl(url, {
+    const { output, result } = await curl(url, {
       maxAttempts,
       retryDelaySeconds,
       retryAll,
       followRedirect,
       cookie,
-      basicAuth
+      basicAuth,
     });
+
+    core.info(output);
+    core.info(result);
+    core.info(output.includes("Access-Control-Allow-Origin"));
+
+    core.info("Success");
   }
 
   core.info("Success");

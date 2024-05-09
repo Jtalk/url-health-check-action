@@ -1,14 +1,14 @@
-# URL health check action
+# CORS check action
 
-A cURL-based post-deploy health check with build-in redirect & retry. An quick & easy way to verify a deployment.   
+A cURL-based post-deploy CORS check with build-in redirect & retry. An quick & easy way to verify if a url will work correctly with CORS. 
 
 ```yaml
 steps:
   - name: Check the deployed service URL
-    uses: jtalk/url-health-check-action@v4
+    uses: Qiming-Liu/cors-check-action@v1
     with:
       # Check the following URLs one by one sequentially
-      url: https://example.com|http://example.com
+      url: https://cypress.io
       # Follow redirects, or just report success on 3xx status codes
       follow-redirect: false # Optional, defaults to "false"
       # Fail this action after this many failed attempts
@@ -25,4 +25,4 @@ steps:
       basic-auth: "login:password" # Optional, default is empty
 ```
 
-The action will fail if any of the URLs reports either 4xx or 5xx status codes.
+The action will fail if once all `max-attempts` have been exhausted, or the `url` will not work correctly with CORS.
