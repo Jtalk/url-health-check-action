@@ -23,6 +23,18 @@ steps:
       # Basic auth login password pair.
       # Format: `login:password`
       basic-auth: "login:password" # Optional, default is empty
+      # Optional: Custom validation javascript to check response
+      custom-validation: |
+        // Check status code
+        if (response.statusCode !== 200) return false;
+        
+        // Check response body
+        if (!response.body.includes('Welcome')) return false;
+        
+        // Check headers
+        if (!response.headers['content-type'].includes('text/html')) return false;
+        
+        return true;
 ```
 
 The action will fail if any of the URLs reports either 4xx or 5xx status codes.

@@ -8,7 +8,7 @@ export async function curl(
   url,
   { maxAttempts, retryDelaySeconds, retryAll, followRedirect, cookie, basicAuth }
 ) {
-  const options = ["--fail", "-sv"];
+  const options = ["--fail", "-sv", "-w", "\\n%{http_code}"];
   if (maxAttempts > 1) {
     options.push(
       "--retry",
@@ -36,7 +36,30 @@ export async function curl(
   core.info(`Checking ${url}`);
   core.debug(`Command: curl ${options.join(" ")}`);
 
-  return exec("curl", options);
+  const { stdout, stderr } = await getExecOutput("curl", options);
+  
+  // Parse response
+  const lines = stdout.split('\n');
+  const statusCode = parseInt(lines[lines.length - 1]);
+  const body = lines.slice(0, -1).join('\n');
+  
+  // Parse headers from stderr
+  const headers = {};
+  const headerLines = stderr.split('\n');
+  for (const line of headerLines) {
+    if (line.startsWith('< ')) {
+      const [_, header] = line.match(/< (.*?): (.*)/) || [];
+      if (header) {
+        headers[header.toLowerCase()] = line.split(': ')[1];
+      }
+    }
+  }
+
+  return {
+    statusCode,
+    body,
+    headers
+  };
 }
 
 export async function isVersion(atLeast) {

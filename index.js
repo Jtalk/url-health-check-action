@@ -15,6 +15,19 @@ process.on("unhandledRejection", (reason) => {
   }
 });
 
+async function runCustomValidation(response, validationCode) {
+  if (!validationCode) return true;
+  
+  try {
+    // Create a function from the validation code
+    const validateFn = new Function('response', validationCode);
+    return validateFn(response);
+  } catch (error) {
+    core.error(`Validation error: ${error.message}`);
+    return false;
+  }
+}
+
 async function run() {
   const urlString = core.getInput("url", { required: true });
   const maxAttemptsString = core.getInput("max-attempts");
@@ -23,6 +36,7 @@ async function run() {
   const retryAll = core.getBooleanInput("retry-all");
   const cookie = core.getInput("cookie");
   const basicAuth = core.getInput("basic-auth");
+  const customValidation = core.getInput("custom-validation");
 
   const urls = urlString.split("|");
   const retryDelaySeconds = duration.parse(retryDelay).seconds();
@@ -43,7 +57,7 @@ async function run() {
   for (const url of urls) {
     // We don't need to do it in parallel, we're going to have to
     // wait for all of them anyway
-    await curl(url, {
+    const response = await curl(url, {
       maxAttempts,
       retryDelaySeconds,
       retryAll,
@@ -51,6 +65,12 @@ async function run() {
       cookie,
       basicAuth
     });
+
+    // Run custom validation if provided
+    const isValid = await runCustomValidation(response, customValidation);
+    if (!isValid) {
+      throw new Error(`Custom validation failed for URL: ${url}`);
+    }
   }
 
   core.info("Success");

@@ -35,6 +35,15 @@ inputs:
       Format: `login:password`
     required: false
     default: ""
+  custom-validation:
+    description: |
+      JavaScript code to validate the response. The code will have access to:
+      - response.statusCode: HTTP status code
+      - response.body: Response body as string
+      - response.headers: Response headers as object
+      Return true to pass validation, false or throw error to fail.
+    required: false
+    default: ""
 branding:
   icon: check
   color: purple
